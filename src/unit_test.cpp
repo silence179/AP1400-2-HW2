@@ -1,10 +1,12 @@
 
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-#include "server.h"
-#include "client.h"
+#include <error.h>
 
-/*
+#include "client.h"
+#include "crypto.h"
+#include "gtest/gtest.h"
+#include "server.h"
+extern std::vector<std::string> pending_trxs;
+
 TEST(HW1Test, TEST1) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -115,10 +117,9 @@ TEST(HW1Test, TEST14) {
     EXPECT_TRUE(clint->transfer_money("sarah", 2.5));
     EXPECT_TRUE(sarah->transfer_money("bryan", 0.5));
 
-    std::cout  <<  std::string(20, '*') <<  std::endl;
-    for(const  auto& trx : pending_trxs)
-        std::cout << trx <<  std::endl;
-    std::cout  <<  std::string(20, '*') <<  std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto& trx : pending_trxs) std::cout << trx << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
 }
 
 TEST(HW1Test, TEST15) {
@@ -132,9 +133,8 @@ TEST(HW1Test, TEST15) {
     EXPECT_TRUE(sarah->transfer_money("bryan", 0.5));
 
     std::string mempool{};
-    for(const auto& trx : pending_trxs)
-        mempool += trx;
-        
+    for (const auto& trx : pending_trxs) mempool += trx;
+
     show_wallets(server);
     size_t nonce{server.mine()};
     show_wallets(server);
@@ -142,11 +142,10 @@ TEST(HW1Test, TEST15) {
     std::string hash = crypto::sha256(mempool + std::to_string(nonce));
     EXPECT_TRUE(hash.substr(0, 10).find("000") != std::string::npos);
     // MINER is: sarah || bryan || clint
-    EXPECT_TRUE(bryan->get_wallet()==4.5 || bryan->get_wallet()==10.75 || bryan->get_wallet()==4.5);
-    EXPECT_TRUE(clint->get_wallet()==3.5 ||clint->get_wallet()==3.5 ||clint->get_wallet()==9.75);
-    EXPECT_TRUE(sarah->get_wallet()==13.25 || sarah->get_wallet()==7 || sarah->get_wallet()==7);
+    EXPECT_TRUE(bryan->get_wallet() == 4.5 || bryan->get_wallet() == 10.75 ||
+                bryan->get_wallet() == 4.5);
+    EXPECT_TRUE(clint->get_wallet() == 3.5 || clint->get_wallet() == 3.5 ||
+                clint->get_wallet() == 9.75);
+    EXPECT_TRUE(sarah->get_wallet() == 13.25 || sarah->get_wallet() == 7 ||
+                sarah->get_wallet() == 7);
 }
-*/
-
-
-
